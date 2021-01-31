@@ -1,11 +1,13 @@
 import React from "react";
 import pet from "@frontendmasters/pet";
+import { navigate } from "@reach/router";
 import Carousel from "./Carousel";
+import Modal from "./Modal";
 import ErrorBoundary from "./ErrorBoundary";
 import ThemeContext from "./ThemeContext";
 
 class Details extends React.Component {
-  state = { loading: true };
+  state = { loading: true, showModal: false };
   //   constructor(props) {
   //     super(props);
   //     this.state = {
@@ -18,6 +20,7 @@ class Details extends React.Component {
       this.setState({
         name: animal.name,
         animal: animal.type,
+        url: animal.url,
         location: `${animal.contact.address.city}, ${animal.contact.address.state}`,
         description: animal.description,
         media: animal.photos,
@@ -26,11 +29,21 @@ class Details extends React.Component {
       });
     }, console.error);
   }
+  toggleModal = () => this.setState({ showModal: !this.state.showModal });
+  adopt = () => navigate(this.state.url);
   render() {
     if (this.state.loading) {
       return <h1>loading...</h1>;
     }
-    const { animal, breed, location, description, media, name } = this.state;
+    const {
+      animal,
+      breed,
+      location,
+      description,
+      media,
+      name,
+      showModal,
+    } = this.state;
     return (
       <div className="details">
         <Carousel media={media} />
@@ -47,7 +60,16 @@ class Details extends React.Component {
               </button>
             )}
           </ThemeContext.Consumer>
-          ;<p>{description}</p>
+          <p>{description}</p>
+          {showModal ? (
+            <Modal>
+              <h1>Would you like to adopt {name}?</h1>
+              <div className="buttons">
+                <button onClick={this.adopt}>Yes</button>
+                <button onClick={this.toggleModal}>No, I am a monster</button>
+              </div>
+            </Modal>
+          ) : null}
         </div>
       </div>
     );
