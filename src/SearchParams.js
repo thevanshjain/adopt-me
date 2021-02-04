@@ -45,7 +45,7 @@ const SearchParams = () => {
         </label>
         <AnimalDropdown />
         <BreedDropdown />
-        <label htmlFor="location">
+        <label htmlFor="theme">
           Theme
           <select
             value={theme}
